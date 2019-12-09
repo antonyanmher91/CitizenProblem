@@ -240,9 +240,9 @@ public class PostActivity extends AppCompatActivity {
             Toast.makeText(PostActivity.this, "No image selected", Toast.LENGTH_SHORT).show();
             db.collection("problems")
                     .add(model);
-            adapter.notifyDataSetChanged();
-            pd.dismiss();
+                    pd.dismiss();
         }
+        adapter.notifyDataSetChanged();
         fileList();
     }
 
