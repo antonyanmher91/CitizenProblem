@@ -6,11 +6,14 @@ import java.io.Serializable;
 
 public class Problem_Model implements Serializable {
     private String userimg = "";
+
+    public void setProblemimg(String problemimg) {
+        this.problemimg = problemimg;
+    }
+
     private String problemimg = "";
     private String name;
     private int like;
-
-
     private String problemDescription;
     private String address;
     private String id;

@@ -220,8 +220,10 @@ public class PostActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
                     uri = downloadUri;
+                    model.setProblemimg(uri.toString());
                     db.collection("problems")
                             .add(model);
+
                     pd.dismiss();
                 } else {
                     Toast.makeText(PostActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
