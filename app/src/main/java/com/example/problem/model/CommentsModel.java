@@ -11,6 +11,9 @@ public class CommentsModel {
         this.userimg = userimg;
     }
 
+    public CommentsModel() {
+    }
+
     public String getComments() {
         return comments;
     }
