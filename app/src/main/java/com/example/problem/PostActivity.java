@@ -157,7 +157,7 @@ public class PostActivity extends AppCompatActivity {
 
         }
 
-        adapter.notifyDataSetChanged();
+        readList();
         dialog.dismiss();
     }
 
