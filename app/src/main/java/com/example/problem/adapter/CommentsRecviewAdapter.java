@@ -28,10 +28,10 @@ public class CommentsRecviewAdapter extends RecyclerView.Adapter<CommentsRecview
 
     @Override
     public void onBindViewHolder(@NonNull CommentsRecviewAdapter.ViewHolder holder, int position) {
-        if (!list.get(position).getUserimg().equals("")) {
-            Picasso.get().load(list.get(position).getUserimg()).into(holder.img);
+        if (!list.get(position).getUserImg().equals("")) {
+            Picasso.get().load(list.get(position).getUserImg()).into(holder.img);
         }
-        holder.name.setText(list.get(position).getUsernaem());
+        holder.name.setText(list.get(position).getUserName());
         holder.comments.setText(list.get(position).getComments());
     }
 

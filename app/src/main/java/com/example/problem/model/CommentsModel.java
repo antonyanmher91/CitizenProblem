@@ -2,13 +2,13 @@ package com.example.problem.model;
 
 public class CommentsModel {
     private String comments;
-    private String usernaem;
-    private String userimg;
+    private String userName;
+    private String userImg;
 
     public CommentsModel(String comments, String usernaem, String userimg) {
         this.comments = comments;
-        this.usernaem = usernaem;
-        this.userimg = userimg;
+        this.userName = usernaem;
+        this.userImg = userimg;
     }
 
     public CommentsModel() {
@@ -18,11 +18,11 @@ public class CommentsModel {
         return comments;
     }
 
-    public String getUsernaem() {
-        return usernaem;
+    public String getUserName() {
+        return userName;
     }
 
-    public String getUserimg() {
-        return userimg;
+    public String getUserImg() {
+        return userImg;
     }
 }
