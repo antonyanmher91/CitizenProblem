@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Citizen_Problem</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="don_t_have_an_account_sign_up">Don\'t Have an Account? Sign Up</string>
+     <string name="name">Name</string>
+    <string name="surname">SurName</string>
+    <string name="email">Email</string>
+    <string name="repassword">Repassword</string>
+    <string name="sign_up">sign_up</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="gallirey">gallirey</string>
+    <string name="camer">camer</string>
+    <string name="location">location</string>
+
+</resources>

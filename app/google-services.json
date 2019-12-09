@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "599941267488",
+    "firebase_url": "https://citizen-problem.firebaseio.com",
+    "project_id": "citizen-problem",
+    "storage_bucket": "citizen-problem.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:599941267488:android:eaf050cadd26e270b1fc45",
+        "android_client_info": {
+          "package_name": "com.example.problem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "599941267488-t2tvkhsp5rksih8eu7gnlp45slfndt3c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.problem",
+            "certificate_hash": "67f74c33eb38dbc257b90df1e9f090a828b9dcc8"
+          }
+        },
+        {
+          "client_id": "599941267488-9vaud942h6gv70tki629f4t2vdd711qq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1IY_9hAPZw26e3w_0m3yaAS9k-t49uN0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "599941267488-9vaud942h6gv70tki629f4t2vdd711qq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
