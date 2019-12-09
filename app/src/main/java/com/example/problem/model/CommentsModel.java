@@ -10,7 +10,9 @@ public class CommentsModel {
         this.usernaem = usernaem;
         this.userimg = userimg;
     }
-
+ public CommentsModel() {
+    }
+    
     public String getComments() {
         return comments;
     }
