@@ -45,10 +45,18 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/title_post"
+                android:id="@+id/problem_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/img_user"
+                android:padding="5dp"
+                android:textSize="20sp"
+                android:textStyle="italic" />
+            <TextView
+                android:id="@+id/title_post"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/problem_category"
                 android:padding="5dp"
                 android:textSize="20sp"
                 android:textStyle="italic" />

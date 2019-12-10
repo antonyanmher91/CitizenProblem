@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,19 +15,25 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.problem.Fragment.LoginFragment;
 import com.example.problem.adapter.ProblemPostResyclerAdapter;
 import com.example.problem.model.Problem_Model;
@@ -46,7 +53,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -72,8 +78,10 @@ public class PostActivity extends AppCompatActivity {
     Uri uri;
     final int CAMERA_PIC_REQUEST = 100;
     int PERMISSION_ID = 44;
+    int spinnerPosition = 0;
     FusedLocationProviderClient mFusedLocationClient;
     List<Problem_Model> list;
+    String[] data = {"one", "two", "three", "four", "five"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +92,9 @@ public class PostActivity extends AppCompatActivity {
         FloatingActionButton floatingActionButton = findViewById(R.id.floating_action_button);
         floatingActionButton.setOnClickListener(view1 -> myDialog());
         recyclerView = findViewById(R.id.resView);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         readList();
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -115,44 +126,59 @@ public class PostActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.post_dialog);
         dialog.setCancelable(false);
         findIdDialog();
-        dialog.show();
         calsle_dialog.setOnClickListener(v -> dialog.cancel());
         save_problem.setOnClickListener(v -> btnSave());
         img.setOnClickListener(v -> openImage());
+        ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, data);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner spinner = dialog.findViewById(R.id.spinner);
+        spinner.setAdapter(adapter);
+        spinner.setPrompt("Title");
+        spinner.setSelection(2);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                spinnerPosition = position;
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
+        dialog.show();
     }
 
     private void btnSave() {
-        if (!description_problem.getText().toString().isEmpty() && !addres_problem.getText().toString().isEmpty()) {
+        if (addres_problem.getText().toString().isEmpty()) {
+            addres_problem.setError("isEmpty");
+        } else if (description_problem.getText().toString().isEmpty()) {
+            addres_problem.setError("isEmpty");
+        } else if (!description_problem.getText().toString().isEmpty() && !addres_problem.getText().toString().isEmpty()) {
             if (uploadTask != null && uploadTask.isInProgress()) {
                 Toast.makeText(this, "Upload in preogress", Toast.LENGTH_SHORT).show();
             } else {
-
-
                 Problem_Model model;
                 if (LoginFragment.user.getPhotoUrl() == null) {
                     if (imageUri != null) {
-                        model = new Problem_Model(LoginFragment.user.getDisplayName(),
-                                imageUri.toString(), description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString());
+                        model = new Problem_Model(LoginFragment.user.getDisplayName(), imageUri.toString(),
+                                description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString(), data[spinnerPosition]);
                         uploadImage(model);
                     } else {
                         model = new Problem_Model(LoginFragment.user.getDisplayName(),
-                                description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString());
+                                description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString(), data[spinnerPosition]);
                         uploadImage(model);
                     }
-
-
                 } else {
                     if (imageUri != null) {
                         model = new Problem_Model(LoginFragment.user.getDisplayName(), LoginFragment.user.getPhotoUrl(),
-                                imageUri, description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString());
+                                imageUri, description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString(), data[spinnerPosition]);
                         uploadImage(model);
                     } else {
                         model = new Problem_Model(LoginFragment.user.getDisplayName(), LoginFragment.user.getPhotoUrl(),
-                                description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString());
+                                description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString(), data[spinnerPosition]);
                         uploadImage(model);
                     }
-
 
                 }
 
@@ -219,43 +245,49 @@ public class PostActivity extends AppCompatActivity {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Uploading");
         pd.show();
-        if (imageUri != null) {
-            final StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
-                    + "." + getFileExtension(imageUri));
-            uploadTask = fileReference.putFile(imageUri);
-            uploadTask.continueWithTask((Continuation<UploadTask.TaskSnapshot, Task<Uri>>) task -> {
-                if (!task.isSuccessful()) {
-                    throw task.getException();
-                }
-                return fileReference.getDownloadUrl();
-            }).addOnCompleteListener((OnCompleteListener<Uri>) task -> {
-                if (task.isSuccessful()) {
-                    Uri downloadUri = task.getResult();
-                    uri = downloadUri;
-                    model.setProblemimg(uri.toString());
-                    db.collection("problems")
-                            .add(model);
+        try {
+            if (imageUri != null) {
+                final StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
+                        + "." + getFileExtension(imageUri));
+                uploadTask = fileReference.putFile(imageUri);
+                uploadTask.continueWithTask((Continuation<UploadTask.TaskSnapshot, Task<Uri>>) task -> {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+                    return fileReference.getDownloadUrl();
+                }).addOnCompleteListener((OnCompleteListener<Uri>) task -> {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        uri = downloadUri;
+                        model.setProblemimg(uri.toString());
+                        db.collection("problems")
+                                .add(model);
 
-                    pd.dismiss();
-                } else {
-                    Toast.makeText(PostActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
-                    pd.dismiss();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(PostActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    pd.dismiss();
-                }
-            });
-        } else {
-            Toast.makeText(PostActivity.this, "No image selected", Toast.LENGTH_SHORT).show();
-            db.collection("problems")
-                    .add(model);
+                        pd.dismiss();
+                    } else {
+                        Toast.makeText(PostActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                        pd.dismiss();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(PostActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        pd.dismiss();
+                    }
+                });
+            } else {
+                Toast.makeText(PostActivity.this, "No image selected", Toast.LENGTH_SHORT).show();
+                db.collection("problems")
+                        .add(model);
+                pd.dismiss();
+            }
+            adapter.notifyDataSetChanged();
+            fileList();
+        } catch (Exception e) {
             pd.dismiss();
+            Toast.makeText(this, "please try again", Toast.LENGTH_SHORT).show();
         }
-        adapter.notifyDataSetChanged();
-        fileList();
+
     }
 
     private String getFileExtension(Uri uri) {
@@ -349,4 +381,32 @@ public class PostActivity extends AppCompatActivity {
         }
     };
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search, menu);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        MenuItem search = menu.findItem(R.id.search);
+        SearchView searchView = null;
+        if (search != null) {
+            searchView = (SearchView) search.getActionView();
+        }
+        if (searchView != null) {
+            assert searchManager != null;
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String s) {
+
+                    adapter.getFilter().filter(s);
+                    return true;
+                }
+            });
+        }
+        return true;
+    }
 }

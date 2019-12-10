@@ -1,7 +1,9 @@
 package com.example.problem.Fragment;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +11,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.fragment.app.Fragment;
+
 import com.example.problem.PostActivity;
 import com.example.problem.R;
 import com.google.android.material.textfield.TextInputEditText;
@@ -27,6 +31,7 @@ public class LoginFragment extends Fragment {
     private TextView registr;
     private FirebaseAuth mAuth;
     public static FirebaseUser user;
+    SharedPreferences sharedPreferences;
 
     public LoginFragment() {
     }
@@ -39,7 +44,6 @@ public class LoginFragment extends Fragment {
         findId(view);
 
         mAuth = FirebaseAuth.getInstance();
-
         registr.setOnClickListener(v -> getFragmentManager().beginTransaction().add(R.id.main_conteneier, new RegistrFragment()).commit());
         login.setOnClickListener(v1 -> sing_in(email.getText().toString(), password.getText().toString()));
         return view;
@@ -53,6 +57,8 @@ public class LoginFragment extends Fragment {
                             user = mAuth.getCurrentUser();
                             Intent intent = new Intent(LoginFragment.this.getActivity(), PostActivity.class);
                             startActivity(intent);
+                            saveText(email, password);
+                            getActivity().finish();
                         } else {
                             Toast.makeText(getContext(), "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
@@ -96,6 +102,15 @@ public class LoginFragment extends Fragment {
         password = view.findViewById(R.id.pass);
         login = view.findViewById(R.id.btn_login);
         registr = view.findViewById(R.id.registr);
+    }
+
+    public void saveText(String mail, String pass) {
+        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("login", mail);
+        editor.putString("pass", pass);
+        editor.commit();
+
     }
 
 

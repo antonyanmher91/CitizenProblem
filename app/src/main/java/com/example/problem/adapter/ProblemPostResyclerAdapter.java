@@ -1,30 +1,43 @@
 package com.example.problem.adapter;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.problem.CommentActivity;
+import com.example.problem.Fragment.LoginFragment;
+import com.example.problem.MainActivity;
+import com.example.problem.PostActivity;
 import com.example.problem.R;
 import com.example.problem.model.Problem_Model;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPostResyclerAdapter.ViewHolder> {
+public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPostResyclerAdapter.ViewHolder> implements Filterable {
     private List<Problem_Model> list;
-
+    SharedPreferences sharedPreferences;
+    private List<Problem_Model> listfiltr;
 
     public ProblemPostResyclerAdapter(List<Problem_Model> list) {
         this.list = list;
+        this.listfiltr=list;
     }
 
     @NonNull
@@ -37,33 +50,94 @@ public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPost
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        holder.user_name_surname.setText(list.get(position).getName());
-        holder.title_post.setText(list.get(position).getAddress());
-        holder.post_description.setText(list.get(position).getProblemDescription());
-        if (!list.get(position).getUserimg().equals("")) {
-            Picasso.get().load(list.get(position).getUserimg()).into(holder.user_img);
+        holder.user_name_surname.setText(listfiltr.get(position).getName());
+        holder.title_post.setText(listfiltr.get(position).getAddress());
+        holder.post_description.setText(listfiltr.get(position).getProblemDescription());
+        holder.problem_category.setText(listfiltr.get(position).getProblemsType());
+        if (!listfiltr.get(position).getUserimg().equals("")) {
+            Picasso.get().load(listfiltr.get(position).getUserimg()).into(holder.user_img);
         }
-        if (!list.get(position).getProblemimg().equals(""))
-            Picasso.get().load(list.get(position).getProblemimg()).into(holder.post_img);
-        holder.countLike.setText(String.valueOf(list.get(position).getLike()));
-        holder.like.setOnClickListener(view -> {
-            int likecount = list.get(position).getLike();
-            list.get(position).setLike(++likecount);
-            notifyDataSetChanged();
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            Map<String, Integer> hashmap = new HashMap<>();
-            hashmap.put("like", likecount);
-            db.collection("problems").document(list.get(position).getId())
-                    .set(hashmap, SetOptions.merge());
+        if (!listfiltr.get(position).getProblemimg().equals(""))
+            Picasso.get().load(listfiltr.get(position).getProblemimg()).into(holder.post_img);
+        holder.countLike.setText(String.valueOf(listfiltr.get(position).getLike()));
+        if (isLike(holder,position)){
             holder.like.setClickable(false);
             holder.like.setImageResource(R.drawable.ic_thumb_up_blue_24dp);
-        });
+
+        }else {
+            holder.like.setOnClickListener(view -> {
+                int likecount = listfiltr.get(position).getLike();
+                listfiltr.get(position).setLike(++likecount);
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                Map<String, Object> hashmap = new HashMap<>();
+                hashmap.put("like", likecount);
+                hashmap.put("islike",true);
+                db.collection("problems").document(listfiltr.get(position).getId())
+                        .set(hashmap, SetOptions.merge());
+                holder.like.setClickable(false);
+                holder.like.setImageResource(R.drawable.ic_thumb_up_blue_24dp);
+                holder.like.setClickable(false);
+                like(holder, position);
+                notifyDataSetChanged();
+            });
+        }
+
+
+    }
+    private boolean isLike(ViewHolder holder, int position) {
+        PostActivity activity = (PostActivity) holder.itemView.getContext();
+        sharedPreferences = activity.getPreferences(Context.MODE_PRIVATE);
+        boolean like = sharedPreferences.getBoolean(listfiltr.get(position).getId(), false);
+        return  like;
+
 
     }
 
+    private void like(@NonNull ViewHolder holder, int position) {
+        PostActivity activity = (PostActivity) holder.itemView.getContext();
+        sharedPreferences = activity.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(listfiltr.get(position).getId(), true);
+        editor.commit();
+    }
+
+
     @Override
     public int getItemCount() {
-        return list == null ? 0 : list.size();
+        return listfiltr == null ? 0 : listfiltr.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    listfiltr = list;
+                } else {
+                    List<Problem_Model> filtredList = new ArrayList<>();
+                    for (Problem_Model s : list) {
+                        if (s.getProblemsType().toLowerCase().contains(charString.toLowerCase())) {
+                            filtredList.add(s);
+                        }
+
+                    }
+                    listfiltr = filtredList;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = listfiltr;
+                filterResults.count = listfiltr.size();
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults results) {
+                listfiltr = (ArrayList<Problem_Model>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -75,6 +149,7 @@ public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPost
         ImageView comment;
         ImageView like;
         TextView countLike;
+        TextView problem_category;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -86,14 +161,17 @@ public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPost
             post_description = itemView.findViewById(R.id.description_comment);
             comment = itemView.findViewById(R.id.post_coment);
             like = itemView.findViewById(R.id.like_post);
+            problem_category=itemView.findViewById(R.id.problem_category);
             comment.setOnClickListener(view -> {
                 Intent intent = new Intent(itemView.getContext(), CommentActivity.class);
-                intent.putExtra("id", list.get(getAdapterPosition()).getId());
-                intent.putExtra("username", list.get(getAdapterPosition()).getName());
-                intent.putExtra("imgurl", list.get(getAdapterPosition()).getUserimg());
+                intent.putExtra("id", listfiltr.get(getAdapterPosition()).getId());
+                intent.putExtra("username", listfiltr.get(getAdapterPosition()).getName());
+                intent.putExtra("imgurl", listfiltr.get(getAdapterPosition()).getUserimg());
                 itemView.getContext().startActivity(intent);
             });
 
+
         }
     }
+
 }

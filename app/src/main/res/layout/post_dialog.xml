@@ -13,6 +13,12 @@
         android:layout_centerInParent="true"
         android:layout_margin="5dp"
         android:src="@drawable/ic_launcher_background" />
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content">
+
+    </Spinner>
 
     <EditText
         android:id="@+id/addres_problem"
@@ -46,7 +52,20 @@
         android:layout_marginRight="25dp"
         android:layout_marginBottom="50dp"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/close_dialog"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:textColor="#FE5295"
+            android:textSize="17sp"
+            />
 
         <Button
             android:id="@+id/save"
@@ -62,19 +81,6 @@
             android:textSize="17sp"
             />
 
-        <Button
-            android:id="@+id/close_dialog"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/button"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:text="@string/cancel"
-            android:textAllCaps="false"
-            android:textColor="#FE5295"
-            android:textSize="17sp"
-            />
     </LinearLayout>
 
     <LinearLayout
@@ -88,7 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/button"
-            android:text="@string/gallirey"
+            android:text="@string/gallery"
             android:textColor="#FE5295" />
 
         <Button
@@ -96,7 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/button"
-            android:text="@string/camer"
+            android:text="@string/camera"
             android:textColor="#FE5295" />
 
         <Button

@@ -14,8 +14,8 @@
     <string name="sign_up">sign_up</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
-    <string name="gallirey">gallirey</string>
-    <string name="camer">camer</string>
+    <string name="gallery">gallery</string>
+    <string name="camera">camer</string>
     <string name="location">location</string>
 
 </resources>
