@@ -123,7 +123,7 @@ public class PostActivity extends AppCompatActivity {
     }
 
     private void btnSave() {
-        if (!description_problem.getText().toString().isEmpty()&& !addres_problem.getText().toString().isEmpty()) {
+        if (!description_problem.getText().toString().isEmpty() && !addres_problem.getText().toString().isEmpty()) {
             if (uploadTask != null && uploadTask.isInProgress()) {
                 Toast.makeText(this, "Upload in preogress", Toast.LENGTH_SHORT).show();
             } else {
@@ -161,11 +161,11 @@ public class PostActivity extends AppCompatActivity {
 
 
             dialog.dismiss();
-        }else {
-            if (description_problem.getText().toString().isEmpty() ){
+        } else {
+            if (description_problem.getText().toString().isEmpty()) {
                 description_problem.setError("isEmpty");
             }
-            if (addres_problem.getText().toString().isEmpty()){
+            if (addres_problem.getText().toString().isEmpty()) {
                 addres_problem.setError("isEmpty");
             }
         }
