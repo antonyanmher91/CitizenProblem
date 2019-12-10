@@ -81,7 +81,7 @@ public class PostActivity extends AppCompatActivity {
     int spinnerPosition = 0;
     FusedLocationProviderClient mFusedLocationClient;
     List<Problem_Model> list;
-    String[] data = {"one", "two", "three", "four", "five"};
+    String[] data = {"dirty streets", "garbage not dumped", "quarter problems"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,11 +92,9 @@ public class PostActivity extends AppCompatActivity {
         FloatingActionButton floatingActionButton = findViewById(R.id.floating_action_button);
         floatingActionButton.setOnClickListener(view1 -> myDialog());
         recyclerView = findViewById(R.id.resView);
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         readList();
-
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
