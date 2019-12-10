@@ -159,7 +159,7 @@ public class PostActivity extends AppCompatActivity {
 
             }
 
-            readList();
+
             dialog.dismiss();
         }else {
             if (description_problem.getText().toString().isEmpty() ){
@@ -169,6 +169,7 @@ public class PostActivity extends AppCompatActivity {
                 addres_problem.setError("isEmpty");
             }
         }
+        readList();
 
     }
 

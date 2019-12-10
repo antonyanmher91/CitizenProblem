@@ -31,7 +31,12 @@ public class CommentsRecviewAdapter extends RecyclerView.Adapter<CommentsRecview
         if (!list.get(position).getUserImg().equals("")) {
             Picasso.get().load(list.get(position).getUserImg()).into(holder.img);
         }
-        holder.name.setText(list.get(position).getUserName());
+        if (list.get(position).getUserName()!=null){
+            holder.name.setText(list.get(position).getUserName());
+
+        }else {
+            holder.name.setText("User");
+        }
         holder.comments.setText(list.get(position).getComments());
     }
 
