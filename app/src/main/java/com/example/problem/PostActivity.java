@@ -133,7 +133,7 @@ public class PostActivity extends AppCompatActivity {
                 if (LoginFragment.user.getPhotoUrl() == null) {
                     if (imageUri != null) {
                         model = new Problem_Model(LoginFragment.user.getDisplayName(),
-                                imageUri, description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString());
+                                imageUri.toString(), description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString());
                         uploadImage(model);
                     } else {
                         model = new Problem_Model(LoginFragment.user.getDisplayName(),

@@ -44,6 +44,14 @@ public class Problem_Model implements Serializable {
         this.problemDescription = problemDescription;
         this.id = id;
     }
+    public Problem_Model(String name, String problemimg, String problemDescription, String address, String id) {
+        this.name = name;
+        this.problemimg = problemimg;
+        this.problemDescription = problemDescription;
+        this.id = id;
+    }
+
+
 
     public Problem_Model(String name, String problemDescription, String address, String id) {
         this.name = name;
