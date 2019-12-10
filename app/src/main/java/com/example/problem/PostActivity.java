@@ -94,6 +94,12 @@ public class PostActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.resView);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        try {
+            getSupportActionBar().setTitle(LoginFragment.user.getDisplayName());
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+
         readList();
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
