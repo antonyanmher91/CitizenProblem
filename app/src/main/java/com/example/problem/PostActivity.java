@@ -14,18 +14,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.problem.Fragment.LoginFragment;
 import com.example.problem.adapter.ProblemPostResyclerAdapter;
 import com.example.problem.model.Problem_Model;
@@ -45,6 +46,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -121,44 +123,53 @@ public class PostActivity extends AppCompatActivity {
     }
 
     private void btnSave() {
-
-        if (uploadTask != null && uploadTask.isInProgress()) {
-            Toast.makeText(this, "Upload in preogress", Toast.LENGTH_SHORT).show();
-        } else {
-
-
-            Problem_Model model;
-            if (LoginFragment.user.getPhotoUrl() == null) {
-                if (imageUri != null) {
-                    model = new Problem_Model(LoginFragment.user.getDisplayName(),
-                            imageUri, description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString());
-                    uploadImage(model);
-                } else {
-                    model = new Problem_Model(LoginFragment.user.getDisplayName(),
-                            description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString());
-                    uploadImage(model);
-                }
-
-
+        if (!description_problem.getText().toString().isEmpty()&& !addres_problem.getText().toString().isEmpty()) {
+            if (uploadTask != null && uploadTask.isInProgress()) {
+                Toast.makeText(this, "Upload in preogress", Toast.LENGTH_SHORT).show();
             } else {
-                if (imageUri != null) {
-                    model = new Problem_Model(LoginFragment.user.getDisplayName(), LoginFragment.user.getPhotoUrl(),
-                            imageUri, description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString());
-                    uploadImage(model);
+
+
+                Problem_Model model;
+                if (LoginFragment.user.getPhotoUrl() == null) {
+                    if (imageUri != null) {
+                        model = new Problem_Model(LoginFragment.user.getDisplayName(),
+                                imageUri, description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString());
+                        uploadImage(model);
+                    } else {
+                        model = new Problem_Model(LoginFragment.user.getDisplayName(),
+                                description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString());
+                        uploadImage(model);
+                    }
+
+
                 } else {
-                    model = new Problem_Model(LoginFragment.user.getDisplayName(), LoginFragment.user.getPhotoUrl(),
-                            description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString());
-                    uploadImage(model);
+                    if (imageUri != null) {
+                        model = new Problem_Model(LoginFragment.user.getDisplayName(), LoginFragment.user.getPhotoUrl(),
+                                imageUri, description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString());
+                        uploadImage(model);
+                    } else {
+                        model = new Problem_Model(LoginFragment.user.getDisplayName(), LoginFragment.user.getPhotoUrl(),
+                                description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString());
+                        uploadImage(model);
+                    }
+
+
                 }
 
 
             }
 
-
+            readList();
+            dialog.dismiss();
+        }else {
+            if (description_problem.getText().toString().isEmpty() ){
+                description_problem.setError("isEmpty");
+            }
+            if (addres_problem.getText().toString().isEmpty()){
+                addres_problem.setError("isEmpty");
+            }
         }
 
-        readList();
-        dialog.dismiss();
     }
 
     private void findIdDialog() {
@@ -240,7 +251,7 @@ public class PostActivity extends AppCompatActivity {
             Toast.makeText(PostActivity.this, "No image selected", Toast.LENGTH_SHORT).show();
             db.collection("problems")
                     .add(model);
-                    pd.dismiss();
+            pd.dismiss();
         }
         adapter.notifyDataSetChanged();
         fileList();

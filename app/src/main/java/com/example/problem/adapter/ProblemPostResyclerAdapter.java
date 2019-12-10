@@ -55,7 +55,10 @@ public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPost
             hashmap.put("like", likecount);
             db.collection("problems").document(list.get(position).getId())
                     .set(hashmap, SetOptions.merge());
+            holder.like.setClickable(false);
+            holder.like.setImageResource(R.drawable.ic_thumb_up_blue_24dp);
         });
+
     }
 
     @Override
