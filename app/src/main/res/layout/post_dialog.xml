@@ -28,7 +28,7 @@
         android:layout_centerInParent="true"
         android:layout_marginBottom="5dp"
         android:background="@drawable/edit_text_top"
-        android:hint="address"
+        android:hint="@string/address"
         android:textColorHint="#60AF5050"
         android:textSize="20sp" />
 
@@ -95,7 +95,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/button"
             android:text="@string/gallery"
-            android:textColor="#FE5295" />
+            android:textColor="#FE5295"
+            />
 
         <Button
             android:id="@+id/open_camera"

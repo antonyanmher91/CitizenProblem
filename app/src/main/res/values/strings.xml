@@ -18,5 +18,6 @@
     <string name="camera">camer</string>
     <string name="location">location</string>
     <string name="user">User</string>
+    <string name="address">address</string>
 
 </resources>

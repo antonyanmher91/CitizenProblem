@@ -36,9 +36,10 @@
         android:gravity="center">
         <ImageView
             android:id="@+id/img"
-            android:src="@drawable/ic_launcher_background"
+            android:src="@drawable/ic_image_black_24dp"
             android:layout_width="50dp"
             android:layout_height="50dp"
+
 
             />
         <EditText

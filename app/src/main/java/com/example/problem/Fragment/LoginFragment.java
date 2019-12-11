@@ -31,7 +31,7 @@ public class LoginFragment extends Fragment {
     private TextView registr;
     private FirebaseAuth mAuth;
     public static FirebaseUser user;
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
 
     public LoginFragment() {
     }

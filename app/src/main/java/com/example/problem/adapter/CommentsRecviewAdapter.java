@@ -4,12 +4,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.problem.R;
 import com.example.problem.model.CommentsModel;
 import com.squareup.picasso.Picasso;
+
 import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CommentsRecviewAdapter extends RecyclerView.Adapter<CommentsRecviewAdapter.ViewHolder> {
@@ -31,10 +35,10 @@ public class CommentsRecviewAdapter extends RecyclerView.Adapter<CommentsRecview
         if (!list.get(position).getUserImg().equals("")) {
             Picasso.get().load(list.get(position).getUserImg()).into(holder.img);
         }
-        if (list.get(position).getUserName()!=null){
+        if (list.get(position).getUserName() != null) {
             holder.name.setText(list.get(position).getUserName());
 
-        }else {
+        } else {
             holder.name.setText(R.string.user);
         }
         holder.comments.setText(list.get(position).getComments());

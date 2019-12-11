@@ -86,7 +86,6 @@ public class PostActivity extends AppCompatActivity {
     private FusedLocationProviderClient mFusedLocationClient;
     private List<Problem_Model> list;
     private final String[] data = {"dirty streets", "garbage not dumped", "quarter problems"};
-    private static final String isEmpty="isEmpty";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -244,7 +243,8 @@ public class PostActivity extends AppCompatActivity {
                 && data != null && data.getData() != null) {
             imageUri = data.getData();
             img.setImageURI(imageUri);
-        } else if (requestCode == CAMERA_PIC_REQUEST) {
+        } else if (requestCode == CAMERA_PIC_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
             imageUri = data.getData();
             img.setImageURI(imageUri);
         }

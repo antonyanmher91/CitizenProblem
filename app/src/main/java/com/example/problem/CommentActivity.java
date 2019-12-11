@@ -1,28 +1,32 @@
 package com.example.problem;
+
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.problem.adapter.CommentsRecviewAdapter;
 import com.example.problem.model.CommentsModel;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class CommentActivity extends AppCompatActivity {
-    String id;
-    String name;
-    String imgurl;
-    FirebaseFirestore db;
-    CommentsRecviewAdapter adapter;
-    RecyclerView recyclerView;
-    ImageButton button;
-    EditText editText;
-    List<CommentsModel> list;
+    private String id;
+    private String name;
+    private String imgurl;
+    private FirebaseFirestore db;
+    private CommentsRecviewAdapter adapter;
+    private RecyclerView recyclerView;
+    private ImageButton button;
+    private EditText editText;
+    private List<CommentsModel> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +36,13 @@ public class CommentActivity extends AppCompatActivity {
         button = findViewById(R.id.btn_send);
         editText = findViewById(R.id.text_send);
         id = getIntent().getStringExtra("id");
-        name=getIntent().getStringExtra("username");
-        imgurl=getIntent().getStringExtra("imgurl");
-        list=new ArrayList<>();
+        name = getIntent().getStringExtra("username");
+        imgurl = getIntent().getStringExtra("imgurl");
+        list = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
         readList();
         button.setOnClickListener(view -> {
-            CommentsModel commentsModel = new CommentsModel(editText.getText().toString(),name,imgurl);
+            CommentsModel commentsModel = new CommentsModel(editText.getText().toString(), name, imgurl);
             db.collection(id)
                     .add(commentsModel);
             list.add(commentsModel);
@@ -54,7 +58,7 @@ public class CommentActivity extends AppCompatActivity {
 
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            CommentsModel model =document.toObject(CommentsModel.class);
+                            CommentsModel model = document.toObject(CommentsModel.class);
                             list.add(model);
                         }
                     }

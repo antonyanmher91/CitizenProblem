@@ -10,13 +10,11 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.problem.CommentActivity;
-import com.example.problem.Fragment.LoginFragment;
-import com.example.problem.MainActivity;
 import com.example.problem.PostActivity;
 import com.example.problem.R;
 import com.example.problem.model.Constants;
@@ -29,17 +27,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPostResyclerAdapter.ViewHolder> implements Filterable {
     private List<Problem_Model> list;
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
     private List<Problem_Model> listfiltr;
 
 
     public ProblemPostResyclerAdapter(List<Problem_Model> list) {
         this.list = list;
-        this.listfiltr=list;
+        this.listfiltr = list;
     }
 
     @NonNull
@@ -62,18 +61,18 @@ public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPost
         if (!listfiltr.get(position).getProblemimg().equals(""))
             Picasso.get().load(listfiltr.get(position).getProblemimg()).into(holder.post_img);
         holder.countLike.setText(String.valueOf(listfiltr.get(position).getLike()));
-        if (isLike(holder,position)){
+        if (isLike(holder, position)) {
             holder.like.setClickable(false);
             holder.like.setImageResource(R.drawable.ic_thumb_up_blue_24dp);
 
-        }else {
+        } else {
             holder.like.setOnClickListener(view -> {
                 int likecount = listfiltr.get(position).getLike();
                 listfiltr.get(position).setLike(++likecount);
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 Map<String, Object> hashmap = new HashMap<>();
                 hashmap.put("like", likecount);
-                hashmap.put("islike",true);
+                hashmap.put("islike", true);
                 db.collection(Constants.problem).document(listfiltr.get(position).getId())
                         .set(hashmap, SetOptions.merge());
                 holder.like.setClickable(false);
@@ -86,11 +85,12 @@ public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPost
 
 
     }
+
     private boolean isLike(ViewHolder holder, int position) {
         PostActivity activity = (PostActivity) holder.itemView.getContext();
         sharedPreferences = activity.getPreferences(Context.MODE_PRIVATE);
         boolean like = sharedPreferences.getBoolean(listfiltr.get(position).getId(), false);
-        return  like;
+        return like;
 
 
     }
@@ -163,7 +163,7 @@ public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPost
             post_description = itemView.findViewById(R.id.description_comment);
             comment = itemView.findViewById(R.id.post_coment);
             like = itemView.findViewById(R.id.like_post);
-            problem_category=itemView.findViewById(R.id.problem_category);
+            problem_category = itemView.findViewById(R.id.problem_category);
             comment.setOnClickListener(view -> {
                 Intent intent = new Intent(itemView.getContext(), CommentActivity.class);
                 intent.putExtra("id", listfiltr.get(getAdapterPosition()).getId());

@@ -14,7 +14,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import androidx.fragment.app.Fragment;
+
 import com.example.problem.R;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,7 +33,6 @@ import com.google.firebase.storage.UploadTask;
 public class RegistrFragment extends Fragment {
     private EditText name;
     private EditText surname;
-    private EditText login;
     private EditText password;
     private EditText repassword;
     private EditText mail;
@@ -73,11 +74,11 @@ public class RegistrFragment extends Fragment {
     }
 
     private boolean chekRegistr() {
-        if (name.getText().toString().isEmpty()|| name.length()<2) {
+        if (name.getText().toString().isEmpty() || name.length() < 2) {
             name.setError("Name Empty");
             return false;
         }
-        if (surname.getText().toString().isEmpty()|| surname.length()<2) {
+        if (surname.getText().toString().isEmpty() || surname.length() < 2) {
             surname.setError("Surname Empty");
             return false;
         }
@@ -95,7 +96,7 @@ public class RegistrFragment extends Fragment {
             password.setError("Password must not be less than 6 characters");
             return false;
         }
-        if (!repassword.getText().toString().equals(password.getText().toString())){
+        if (!repassword.getText().toString().equals(password.getText().toString())) {
             repassword.setError("Password does not match");
         }
         return true;
@@ -117,7 +118,6 @@ public class RegistrFragment extends Fragment {
     private void findId(View view) {
         name = view.findViewById(R.id.name);
         surname = view.findViewById(R.id.surname);
-        login = view.findViewById(R.id.username);
         password = view.findViewById(R.id.password);
         repassword = view.findViewById(R.id.repassword);
         mail = view.findViewById(R.id.mail);
@@ -135,7 +135,6 @@ public class RegistrFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == IMAGE_REQUEST && resultCode == getActivity().RESULT_OK
                 && data != null && data.getData() != null) {
             imageUri = data.getData();

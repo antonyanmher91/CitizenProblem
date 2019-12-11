@@ -29,16 +29,16 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getPreferences(Context.MODE_PRIVATE);
         String login = sharedPreferences.getString("login", "");
         String pass = sharedPreferences.getString("pass", "");
-        if (isNetworkConnected()){
+        if (isNetworkConnected()) {
             if (!login.isEmpty() && !pass.isEmpty()) {
                 sing_in(login, pass);
-            }else {
+            } else {
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_conteneier, new LoginFragment()).commit();
             }
-        }else {
+        } else {
             Toast.makeText(this, "No connection", Toast.LENGTH_SHORT).show();
         }
-        
+
     }
 
     private void sing_in(String email, String password) {
@@ -57,11 +57,12 @@ public class MainActivity extends AppCompatActivity {
                 });
 
     }
+
     private boolean isNetworkConnected() {
         try {
             Process p1 = java.lang.Runtime.getRuntime().exec("ping -c 1 www.google.com");
             int returnVal = p1.waitFor();
-            return (returnVal==0);
+            return (returnVal == 0);
         } catch (Exception e) {
             e.printStackTrace();
         }
