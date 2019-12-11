@@ -35,7 +35,7 @@ public class CommentsRecviewAdapter extends RecyclerView.Adapter<CommentsRecview
             holder.name.setText(list.get(position).getUserName());
 
         }else {
-            holder.name.setText("User");
+            holder.name.setText(R.string.user);
         }
         holder.comments.setText(list.get(position).getComments());
     }

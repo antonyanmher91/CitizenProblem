@@ -19,6 +19,7 @@ import com.example.problem.Fragment.LoginFragment;
 import com.example.problem.MainActivity;
 import com.example.problem.PostActivity;
 import com.example.problem.R;
+import com.example.problem.model.Constants;
 import com.example.problem.model.Problem_Model;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
@@ -34,6 +35,7 @@ public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPost
     private List<Problem_Model> list;
     SharedPreferences sharedPreferences;
     private List<Problem_Model> listfiltr;
+
 
     public ProblemPostResyclerAdapter(List<Problem_Model> list) {
         this.list = list;
@@ -72,7 +74,7 @@ public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPost
                 Map<String, Object> hashmap = new HashMap<>();
                 hashmap.put("like", likecount);
                 hashmap.put("islike",true);
-                db.collection("problems").document(listfiltr.get(position).getId())
+                db.collection(Constants.problem).document(listfiltr.get(position).getId())
                         .set(hashmap, SetOptions.merge());
                 holder.like.setClickable(false);
                 holder.like.setImageResource(R.drawable.ic_thumb_up_blue_24dp);

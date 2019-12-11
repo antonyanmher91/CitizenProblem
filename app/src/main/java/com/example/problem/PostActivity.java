@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -34,8 +35,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.problem.Fragment.LoginFragment;
 import com.example.problem.adapter.ProblemPostResyclerAdapter;
+import com.example.problem.model.Constants;
 import com.example.problem.model.Problem_Model;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -53,6 +56,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -75,13 +79,14 @@ public class PostActivity extends AppCompatActivity {
     private Uri imageUri;
     private StorageTask uploadTask;
     private FirebaseFirestore db;
-    Uri uri;
-    final int CAMERA_PIC_REQUEST = 100;
-    int PERMISSION_ID = 44;
-    int spinnerPosition = 0;
-    FusedLocationProviderClient mFusedLocationClient;
-    List<Problem_Model> list;
-    String[] data = {"dirty streets", "garbage not dumped", "quarter problems"};
+    private Uri uri;
+    private final int CAMERA_PIC_REQUEST = 100;
+    private int PERMISSION_ID = 44;
+    private int spinnerPosition = 0;
+    private FusedLocationProviderClient mFusedLocationClient;
+    private List<Problem_Model> list;
+    private final String[] data = {"dirty streets", "garbage not dumped", "quarter problems"};
+    private static final String isEmpty="isEmpty";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +101,7 @@ public class PostActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         try {
             getSupportActionBar().setTitle(LoginFragment.user.getDisplayName());
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
 
@@ -106,7 +111,7 @@ public class PostActivity extends AppCompatActivity {
 
     private void readList() {
         list = new ArrayList<>();
-        db.collection("problems")
+        db.collection(Constants.problem)
                 .get()
                 .addOnCompleteListener(task -> {
 
@@ -155,9 +160,9 @@ public class PostActivity extends AppCompatActivity {
 
     private void btnSave() {
         if (addres_problem.getText().toString().isEmpty()) {
-            addres_problem.setError("isEmpty");
+            addres_problem.setError(Constants.isEmpty);
         } else if (description_problem.getText().toString().isEmpty()) {
-            addres_problem.setError("isEmpty");
+            addres_problem.setError(Constants.isEmpty);
         } else if (!description_problem.getText().toString().isEmpty() && !addres_problem.getText().toString().isEmpty()) {
             if (uploadTask != null && uploadTask.isInProgress()) {
                 Toast.makeText(this, "Upload in preogress", Toast.LENGTH_SHORT).show();
@@ -193,10 +198,10 @@ public class PostActivity extends AppCompatActivity {
             dialog.dismiss();
         } else {
             if (description_problem.getText().toString().isEmpty()) {
-                description_problem.setError("isEmpty");
+                description_problem.setError(Constants.isEmpty);
             }
             if (addres_problem.getText().toString().isEmpty()) {
-                addres_problem.setError("isEmpty");
+                addres_problem.setError(Constants.isEmpty);
             }
         }
         readList();
@@ -264,7 +269,7 @@ public class PostActivity extends AppCompatActivity {
                         Uri downloadUri = task.getResult();
                         uri = downloadUri;
                         model.setProblemimg(uri.toString());
-                        db.collection("problems")
+                        db.collection(Constants.problem)
                                 .add(model);
 
                         pd.dismiss();
@@ -281,7 +286,7 @@ public class PostActivity extends AppCompatActivity {
                 });
             } else {
                 Toast.makeText(PostActivity.this, "No image selected", Toast.LENGTH_SHORT).show();
-                db.collection("problems")
+                db.collection(Constants.problem)
                         .add(model);
                 pd.dismiss();
             }

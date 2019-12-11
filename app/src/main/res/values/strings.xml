@@ -17,5 +17,6 @@
     <string name="gallery">gallery</string>
     <string name="camera">camer</string>
     <string name="location">location</string>
+    <string name="user">User</string>
 
 </resources>
