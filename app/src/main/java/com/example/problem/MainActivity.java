@@ -12,7 +12,7 @@ import com.example.problem.Fragment.LoginFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
-    SharedPreferences sharedPreferences;
+    SharedPreferences shared_preferences;
     private FirebaseAuth mAuth;
 
     @Override
@@ -26,9 +26,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadText() {
-        sharedPreferences = getPreferences(Context.MODE_PRIVATE);
-        String login = sharedPreferences.getString("login", "");
-        String pass = sharedPreferences.getString("pass", "");
+        shared_preferences = getPreferences(Context.MODE_PRIVATE);
+        String login = shared_preferences.getString("login", "");
+        String pass = shared_preferences.getString("pass", "");
         if (isNetworkConnected()) {
             if (!login.isEmpty() && !pass.isEmpty()) {
                 sing_in(login, pass);

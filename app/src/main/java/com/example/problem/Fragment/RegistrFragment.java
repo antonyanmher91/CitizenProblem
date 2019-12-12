@@ -39,8 +39,8 @@ public class RegistrFragment extends Fragment {
     private Button sing_up;
     private FirebaseAuth mAuth;
     private static final int IMAGE_REQUEST = 1;
-    private Uri imageUri;
-    private StorageTask uploadTask;
+    private Uri image_uri;
+    private StorageTask upload_task;
     private StorageReference mStorageRef;
     private FirebaseUser user;
     private ImageView img;
@@ -63,7 +63,7 @@ public class RegistrFragment extends Fragment {
 
     private void clickButton() {
         if (chekRegistr()) {
-            if (uploadTask != null && uploadTask.isInProgress()) {
+            if (upload_task != null && upload_task.isInProgress()) {
                 Toast.makeText(getContext(), "Upload in preogress", Toast.LENGTH_SHORT).show();
             } else {
                 sing_up(mail.getText().toString(), password.getText().toString());
@@ -137,8 +137,8 @@ public class RegistrFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == IMAGE_REQUEST && resultCode == getActivity().RESULT_OK
                 && data != null && data.getData() != null) {
-            imageUri = data.getData();
-            img.setImageURI(imageUri);
+            image_uri = data.getData();
+            img.setImageURI(image_uri);
 
 
         }
@@ -147,14 +147,14 @@ public class RegistrFragment extends Fragment {
     private void uploadImage() {
 
 
-        if (imageUri != null) {
+        if (image_uri != null) {
             final ProgressDialog pd = new ProgressDialog(getContext());
             pd.setMessage("Uploading");
             pd.show();
             final StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
-                    + "." + getFileExtension(imageUri));
-            uploadTask = fileReference.putFile(imageUri);
-            uploadTask.continueWithTask((Continuation<UploadTask.TaskSnapshot, Task<Uri>>) task -> {
+                    + "." + getFileExtension(image_uri));
+            upload_task = fileReference.putFile(image_uri);
+            upload_task.continueWithTask((Continuation<UploadTask.TaskSnapshot, Task<Uri>>) task -> {
                 if (!task.isSuccessful()) {
                     throw task.getException();
                 }

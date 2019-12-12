@@ -32,13 +32,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPostResyclerAdapter.ViewHolder> implements Filterable {
     private List<Problem_Model> list;
-    private SharedPreferences sharedPreferences;
-    private List<Problem_Model> listfiltr;
+    private SharedPreferences shared_preferences;
+    private List<Problem_Model> list_filtr;
 
 
     public ProblemPostResyclerAdapter(List<Problem_Model> list) {
         this.list = list;
-        this.listfiltr = list;
+        this.list_filtr = list;
     }
 
     @NonNull
@@ -51,30 +51,30 @@ public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPost
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        holder.user_name_surname.setText(listfiltr.get(position).getName());
-        holder.title_post.setText(listfiltr.get(position).getAddress());
-        holder.post_description.setText(listfiltr.get(position).getProblemDescription());
-        holder.problem_category.setText(listfiltr.get(position).getProblemsType());
-        if (!listfiltr.get(position).getUserimg().equals("")) {
-            Picasso.get().load(listfiltr.get(position).getUserimg()).into(holder.user_img);
+        holder.user_name_surname.setText(list_filtr.get(position).getName());
+        holder.title_post.setText(list_filtr.get(position).getAddress());
+        holder.post_description.setText(list_filtr.get(position).getProblemDescription());
+        holder.problem_category.setText(list_filtr.get(position).getProblemsType());
+        if (!list_filtr.get(position).getUserimg().equals("")) {
+            Picasso.get().load(list_filtr.get(position).getUserimg()).into(holder.user_img);
         }
-        if (!listfiltr.get(position).getProblemimg().equals(""))
-            Picasso.get().load(listfiltr.get(position).getProblemimg()).into(holder.post_img);
-        holder.countLike.setText(String.valueOf(listfiltr.get(position).getLike()));
+        if (!list_filtr.get(position).getProblemimg().equals(""))
+            Picasso.get().load(list_filtr.get(position).getProblemimg()).into(holder.post_img);
+        holder.count_like.setText(String.valueOf(list_filtr.get(position).getLike()));
         if (isLike(holder, position)) {
             holder.like.setClickable(false);
             holder.like.setImageResource(R.drawable.ic_thumb_up_blue_24dp);
 
         } else {
             holder.like.setOnClickListener(view -> {
-                int likecount = listfiltr.get(position).getLike();
-                listfiltr.get(position).setLike(++likecount);
+                int likecount = list_filtr.get(position).getLike();
+                list_filtr.get(position).setLike(++likecount);
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 Map<String, Object> hashmap = new HashMap<>();
                 hashmap.put("like", likecount);
                 hashmap.put("islike", true);
                 try {
-                    db.collection(Constants.problem).document(listfiltr.get(position).getId())
+                    db.collection(Constants.problem).document(list_filtr.get(position).getId())
                             .set(hashmap, SetOptions.merge());
                 }catch (Exception e){
                     e.printStackTrace();
@@ -92,8 +92,8 @@ public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPost
 
     private boolean isLike(ViewHolder holder, int position) {
         PostActivity activity = (PostActivity) holder.itemView.getContext();
-        sharedPreferences = activity.getPreferences(Context.MODE_PRIVATE);
-        boolean like = sharedPreferences.getBoolean(listfiltr.get(position).getId(), false);
+        shared_preferences = activity.getPreferences(Context.MODE_PRIVATE);
+        boolean like = shared_preferences.getBoolean(list_filtr.get(position).getId(), false);
         return like;
 
 
@@ -101,16 +101,16 @@ public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPost
 
     private void like(@NonNull ViewHolder holder, int position) {
         PostActivity activity = (PostActivity) holder.itemView.getContext();
-        sharedPreferences = activity.getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(listfiltr.get(position).getId(), true);
+        shared_preferences = activity.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = shared_preferences.edit();
+        editor.putBoolean(list_filtr.get(position).getId(), true);
         editor.commit();
     }
 
 
     @Override
     public int getItemCount() {
-        return listfiltr == null ? 0 : listfiltr.size();
+        return list_filtr == null ? 0 : list_filtr.size();
     }
 
     @Override
@@ -121,7 +121,7 @@ public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPost
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString();
                 if (charString.isEmpty()) {
-                    listfiltr = list;
+                    list_filtr = list;
                 } else {
                     List<Problem_Model> filtredList = new ArrayList<>();
                     for (Problem_Model s : list) {
@@ -134,17 +134,17 @@ public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPost
 
                     }
 
-                    listfiltr = filtredList;
+                    list_filtr = filtredList;
                 }
                 FilterResults filterResults = new FilterResults();
-                filterResults.values = listfiltr;
-                filterResults.count = listfiltr.size();
+                filterResults.values = list_filtr;
+                filterResults.count = list_filtr.size();
                 return filterResults;
             }
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults results) {
-                listfiltr = (ArrayList<Problem_Model>) results.values;
+                list_filtr = (ArrayList<Problem_Model>) results.values;
                 notifyDataSetChanged();
             }
         };
@@ -158,13 +158,13 @@ public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPost
         TextView post_description;
         ImageView comment;
         ImageView like;
-        TextView countLike;
+        TextView count_like;
         TextView problem_category;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             user_img = itemView.findViewById(R.id.img_user);
-            countLike = itemView.findViewById(R.id.like);
+            count_like = itemView.findViewById(R.id.like);
             user_name_surname = itemView.findViewById(R.id.name_surname_user);
             title_post = itemView.findViewById(R.id.title_post);
             post_img = itemView.findViewById(R.id.img_problem);
@@ -174,9 +174,9 @@ public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPost
             problem_category = itemView.findViewById(R.id.problem_category);
             comment.setOnClickListener(view -> {
                 Intent intent = new Intent(itemView.getContext(), CommentActivity.class);
-                intent.putExtra("id", listfiltr.get(getAdapterPosition()).getId());
-                intent.putExtra("username", listfiltr.get(getAdapterPosition()).getName());
-                intent.putExtra("imgurl", listfiltr.get(getAdapterPosition()).getUserimg());
+                intent.putExtra("id", list_filtr.get(getAdapterPosition()).getId());
+                intent.putExtra("username", list_filtr.get(getAdapterPosition()).getName());
+                intent.putExtra("imgurl", list_filtr.get(getAdapterPosition()).getUserimg());
                 itemView.getContext().startActivity(intent);
             });
 

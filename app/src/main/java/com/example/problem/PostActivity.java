@@ -77,12 +77,12 @@ public class PostActivity extends AppCompatActivity {
     private ProblemPostResyclerAdapter adapter;
     private StorageReference mStorageRef;
     private Uri imageUri;
-    private StorageTask uploadTask;
+    private StorageTask upload_task;
     private FirebaseFirestore db;
     private Uri uri;
     private final int CAMERA_PIC_REQUEST = 100;
     private int PERMISSION_ID = 44;
-    private int spinnerPosition = 0;
+    private int spinner_position = 0;
     private FusedLocationProviderClient mFusedLocationClient;
     private List<Problem_Model> list;
     private final String[] data = {"","dirty streets", "garbage not dumped", "quarter problems"};
@@ -169,7 +169,7 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                spinnerPosition = position;
+                spinner_position = position;
             }
 
             @Override
@@ -185,28 +185,28 @@ public class PostActivity extends AppCompatActivity {
         } else if (description_problem.getText().toString().isEmpty()) {
             addres_problem.setError(Constants.isEmpty);
         } else if (!description_problem.getText().toString().isEmpty() && !addres_problem.getText().toString().isEmpty()) {
-            if (uploadTask != null && uploadTask.isInProgress()) {
+            if (upload_task != null && upload_task.isInProgress()) {
                 Toast.makeText(this, "Upload in preogress", Toast.LENGTH_SHORT).show();
             } else {
                 Problem_Model model;
                 if (LoginFragment.user.getPhotoUrl() == null) {
                     if (imageUri != null) {
                         model = new Problem_Model(LoginFragment.user.getDisplayName(), imageUri.toString(),
-                                description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString(), data[spinnerPosition]);
+                                description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString(), data[spinner_position]);
                         uploadImage(model);
                     } else {
                         model = new Problem_Model(LoginFragment.user.getDisplayName(),
-                                description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString(), data[spinnerPosition]);
+                                description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString(), data[spinner_position]);
                         uploadImage(model);
                     }
                 } else {
                     if (imageUri != null) {
                         model = new Problem_Model(LoginFragment.user.getDisplayName(), LoginFragment.user.getPhotoUrl(),
-                                imageUri, description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString(), data[spinnerPosition]);
+                                imageUri, description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString(), data[spinner_position]);
                         uploadImage(model);
                     } else {
                         model = new Problem_Model(LoginFragment.user.getDisplayName(), LoginFragment.user.getPhotoUrl(),
-                                description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString(), data[spinnerPosition]);
+                                description_problem.getText().toString(), addres_problem.getText().toString(), UUID.randomUUID().toString(), data[spinner_position]);
                         uploadImage(model);
                     }
 
@@ -280,8 +280,8 @@ public class PostActivity extends AppCompatActivity {
             if (imageUri != null) {
                 final StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
                         + "." + getFileExtension(imageUri));
-                uploadTask = fileReference.putFile(imageUri);
-                uploadTask.continueWithTask((Continuation<UploadTask.TaskSnapshot, Task<Uri>>) task -> {
+                upload_task = fileReference.putFile(imageUri);
+                upload_task.continueWithTask((Continuation<UploadTask.TaskSnapshot, Task<Uri>>) task -> {
                     if (!task.isSuccessful()) {
                         throw task.getException();
                     }
