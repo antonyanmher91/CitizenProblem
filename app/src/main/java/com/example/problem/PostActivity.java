@@ -85,13 +85,31 @@ public class PostActivity extends AppCompatActivity {
     private int spinnerPosition = 0;
     private FusedLocationProviderClient mFusedLocationClient;
     private List<Problem_Model> list;
-    private final String[] data = {"dirty streets", "garbage not dumped", "quarter problems"};
+    private final String[] data = {"","dirty streets", "garbage not dumped", "quarter problems"};
+    private Spinner spinner;
+    ArrayAdapter<String> array_adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
         db = FirebaseFirestore.getInstance();
+        array_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, data);
+        array_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner=findViewById(R.id.spinner_post_activity);
+        spinner.setAdapter(array_adapter);
+        spinner.setPrompt("Title");
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                adapter.getFilter().filter(data[position]);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
         mStorageRef = FirebaseStorage.getInstance().getReference();
         FloatingActionButton floatingActionButton = findViewById(R.id.floating_action_button);
         floatingActionButton.setOnClickListener(view1 -> myDialog());
@@ -137,10 +155,9 @@ public class PostActivity extends AppCompatActivity {
         calsle_dialog.setOnClickListener(v -> dialog.cancel());
         save_problem.setOnClickListener(v -> btnSave());
         img.setOnClickListener(v -> openImage());
-        ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, data);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         Spinner spinner = dialog.findViewById(R.id.spinner);
-        spinner.setAdapter(adapter);
+        spinner.setAdapter(array_adapter);
         spinner.setPrompt("Title");
         spinner.setSelection(2);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

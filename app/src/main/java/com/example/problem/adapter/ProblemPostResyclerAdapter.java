@@ -124,8 +124,12 @@ public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPost
                         if (s.getProblemsType().toLowerCase().contains(charString.toLowerCase())) {
                             filtredList.add(s);
                         }
+                        if (s.getAddress().toLowerCase().contains(charString.toLowerCase())) {
+                            filtredList.add(s);
+                        }
 
                     }
+
                     listfiltr = filtredList;
                 }
                 FilterResults filterResults = new FilterResults();

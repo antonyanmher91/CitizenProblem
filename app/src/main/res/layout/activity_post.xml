@@ -21,10 +21,15 @@
            />
 
     </com.google.android.material.appbar.AppBarLayout>
+    <Spinner
+        android:id="@+id/spinner_post_activity"
+        android:layout_marginTop="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></Spinner>
 
 
 <androidx.recyclerview.widget.RecyclerView
-    android:layout_marginTop="50dp"
+    android:layout_marginTop="85dp"
     android:id="@+id/resView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
