@@ -128,19 +128,24 @@ public class PostActivity extends AppCompatActivity {
 
     private void readList() {
         list = new ArrayList<>();
-        db.collection(Constants.problem)
-                .get()
-                .addOnCompleteListener(task -> {
+        try {
+            db.collection(Constants.problem)
+                    .get()
+                    .addOnCompleteListener(task -> {
 
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Problem_Model model = document.toObject(Problem_Model.class);
-                            model.setId(document.getId());
-                            list.add(model);
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Problem_Model model = document.toObject(Problem_Model.class);
+                                model.setId(document.getId());
+                                list.add(model);
+                            }
                         }
-                    }
-                    adapter.notifyDataSetChanged();
-                });
+                        adapter.notifyDataSetChanged();
+                    });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         adapter = new ProblemPostResyclerAdapter(list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PostActivity.this);
         recyclerView.setLayoutManager(linearLayoutManager);

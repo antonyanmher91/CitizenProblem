@@ -73,8 +73,12 @@ public class ProblemPostResyclerAdapter extends RecyclerView.Adapter<ProblemPost
                 Map<String, Object> hashmap = new HashMap<>();
                 hashmap.put("like", likecount);
                 hashmap.put("islike", true);
-                db.collection(Constants.problem).document(listfiltr.get(position).getId())
-                        .set(hashmap, SetOptions.merge());
+                try {
+                    db.collection(Constants.problem).document(listfiltr.get(position).getId())
+                            .set(hashmap, SetOptions.merge());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 holder.like.setClickable(false);
                 holder.like.setImageResource(R.drawable.ic_thumb_up_blue_24dp);
                 holder.like.setClickable(false);
