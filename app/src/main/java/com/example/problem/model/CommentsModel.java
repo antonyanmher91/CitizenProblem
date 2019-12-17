@@ -13,8 +13,6 @@ public class CommentsModel {
 
     public CommentsModel() {
     }
-    public CommentsModel() {
-    }
     
     public String getComments() {
         return comments;
